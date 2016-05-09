@@ -1,0 +1,17 @@
+rabbitsample_rabbitmq:
+    build: .
+    dockerfile: rabbitmq.dockerfile
+    container_name: rabbitsample-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+      
+rabbitsample:
+    build: .
+    dockerfile: rabbitsample.dockerfile
+    container_name: rabbitsample
+    environment:
+      - ASPNET_ENV=Development
+      - rabbitsample_RabbitMQ__Host=rabbitsample_rabbitmq
+    links:
+      - rabbitsample_rabbitmq
