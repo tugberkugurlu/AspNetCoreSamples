@@ -1,0 +1,6 @@
+api0:
+    build: .
+    dockerfile: api.dockerfile
+    container_name: api0
+    environment:
+      - ASPNET_ENV=Development
