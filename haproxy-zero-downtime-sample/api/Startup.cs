@@ -74,21 +74,21 @@ namespace HelloWorldWeb
     {
         private static IEnumerable<Car> _cars = new[]
         {
-            new Car { Id = 1, Make = "Renault", Model = "" },
+            new Car { Id = 1, Make = "Renault", Model = "Clio" },
             new Car { Id = 2, Make = "Mercedes", Model = "GLA" },
-            new Car { Id = 4, Make = "Renault", Model = "" },
+            new Car { Id = 4, Make = "Renault", Model = "Captur" },
             new Car { Id = 5, Make = "Volkswagen", Model = "Polo" },
             new Car { Id = 3, Make = "Mercedes", Model = "CLS Coupe" },
             new Car { Id = 6, Make = "Toyota", Model = "Yaris" }
         };
            
-        [Route("cars")]
+        [Route("")]
         public IEnumerable<Car> GetCars()
         {
             return _cars;
         }
         
-        [Route("cars/{carId}")]
+        [Route("{carId}")]
         public IActionResult GetCars(int carId)
         {
             IActionResult result;
