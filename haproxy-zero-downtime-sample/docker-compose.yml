@@ -1,6 +1,31 @@
 api0:
     build: .
-    dockerfile: api.dockerfile
+    dockerfile: docker-api.dockerfile
     container_name: api0
     environment:
       - ASPNET_ENV=Development
+      
+api1:
+    build: .
+    dockerfile: docker-api.dockerfile
+    container_name: api1
+    environment:
+      - ASPNET_ENV=Development
+      
+api2:
+    build: .
+    dockerfile: docker-api.dockerfile
+    container_name: api2
+    environment:
+      - ASPNET_ENV=Development
+      
+api-lb:
+    build: .
+    dockerfile: docker-haproxy.dockerfile
+    container_name: api-lb
+    ports:
+      - "5000:80"
+    links:
+      - api0
+      - api1
+      - api2
