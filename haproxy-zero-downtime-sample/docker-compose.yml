@@ -52,3 +52,6 @@ api-lb:
       - api0
       - api1
       - api2
+      - api3
+      - api4
+      - api5
