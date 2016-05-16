@@ -1,10 +1,10 @@
 FROM microsoft/aspnet:1.0.0-rc1-update1
 
-COPY ./api/project.json /app/api/
+COPY ./api-v1.0/project.json /app/api/
 COPY ./NuGet.Config /app/
 WORKDIR /app/
 RUN ["dnu", "restore", "--parallel"]
-ADD ./api/ /app/api/
+ADD ./api-v1.0/ /app/api/
 
 EXPOSE 4000
 WORKDIR /app/api/

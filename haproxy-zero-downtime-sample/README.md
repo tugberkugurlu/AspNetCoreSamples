@@ -62,6 +62,7 @@ A few useful links on this:
  - [haproxy and socat sudo](http://serverfault.com/questions/509934/haproxy-and-socat-sudo)
  - [Simple explanation of the Unix sockets](http://programmers.stackexchange.com/a/135972/22417)
  - [HAProxy doesn't start, can not bind UNIX socket "/run/haproxy/admin.sock"](http://stackoverflow.com/questions/30101075/haproxy-doesnt-start-can-not-bind-unix-socket-run-haproxy-admin-sock)
+ - [HAProxy disabled server mode](https://cbonte.github.io/haproxy-dconv/configuration-1.5.html#5.2-disabled)
 
 ## Going Further
 
@@ -81,3 +82,6 @@ We also have only one load balancer instance here which is a single point of fai
  - [How can I remove balanced node from haproxy via command line?](http://serverfault.com/questions/249316/how-can-i-remove-balanced-node-from-haproxy-via-command-line)
  - [Zero Downtime Deployments haproxy docker‏](https://docs.quay.io/solution/zero-downtime-deployments.html)
  - [Automatically adding backend servers to HAProxy using docker-gen](https://dockify.io/haproxy-scale-automatically/)
+ - [Zero-Downtime Restarts with HAProxy](https://www.igvita.com/2008/12/02/zero-downtime-restarts-with-haproxy/)
+ - [Question: using haproxy.socket to add new servers](http://haproxy.formilux.narkive.com/1OibZABp/using-haproxy-socket-to-add-new-servers)
+ - [Yelp Blog: True Zero Downtime HAProxy Reloads](http://engineeringblog.yelp.com/2015/04/true-zero-downtime-haproxy-reloads.html)
