@@ -42,7 +42,7 @@ You can run this example
 HAProxy can communicate through a Unix socket. [You can add a Unix socket in your config, then interact with that](http://serverfault.com/a/249336). This is [a list of possible commands](http://cbonte.github.io/haproxy-dconv/configuration-1.5.html#9.2) that you can use. To be able to do this, you need to have `socat` installed:
 
 ```
-apt-get install socat
+sudo apt-get install socat
 ```
 
 To take down a node, use [`disable server`](http://cbonte.github.io/haproxy-dconv/configuration-1.5.html#9.2-disable%20server) Unix socket command. This example takes down `api1` server under `api_nodes` backend while assuming the socket is on `./haproxy-data/haproxysock`:
