@@ -1,0 +1,1 @@
+:warning: This folder is mapped to HAProxy docker container to enable interacting witth HAProxy through Unix socket. See [list of Unix Socket commands](http://cbonte.github.io/haproxy-dconv/configuration-1.5.html#9.2) for HAProxy and [this](http://serverfault.com/a/249336) for more info. See [this](http://programmers.stackexchange.com/a/135972/22417) for more on Unix sockets.

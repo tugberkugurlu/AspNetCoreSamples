@@ -23,6 +23,8 @@ api-lb:
     build: .
     dockerfile: docker-haproxy.dockerfile
     container_name: api-lb
+    volumes:
+      - ./haproxy-data:/apps/haproxy
     ports:
       - "5000:80"
     links:

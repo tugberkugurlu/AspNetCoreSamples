@@ -37,6 +37,32 @@ You can run this example
 
 > TODO: Write the thing.
 
+#### Communicating with HAProxy
+
+HAProxy can communicate through a Unix socket. [You can add a Unix socket in your config, then interact with that](http://serverfault.com/a/249336). This is [a list of possible commands](http://cbonte.github.io/haproxy-dconv/configuration-1.5.html#9.2) that you can use. To be able to do this, you need to have `socat` installed:
+
+```
+apt-get install socat
+```
+
+To take down a node, use [`disable server`](http://cbonte.github.io/haproxy-dconv/configuration-1.5.html#9.2-disable%20server) Unix socket command. This example takes down `api1` server under `api_nodes` backend while assuming the socket is on `./haproxy-data/haproxysock`:
+
+```
+echo "disable server api_nodes/api1" | sudo socat stdio ./haproxy-data/haproxysock
+``` 
+
+Use `enable server` to bring one up:
+
+```
+echo "enable server api_nodes/api1" | sudo socat stdio ./haproxy-data/haproxysock
+``` 
+
+A few useful links on this:
+
+ - [haproxy and socat sudo](http://serverfault.com/questions/509934/haproxy-and-socat-sudo)
+ - [Simple explanation of the Unix sockets](http://programmers.stackexchange.com/a/135972/22417)
+ - [HAProxy doesn't start, can not bind UNIX socket "/run/haproxy/admin.sock"](http://stackoverflow.com/questions/30101075/haproxy-doesnt-start-can-not-bind-unix-socket-run-haproxy-admin-sock)
+
 ## Going Further
 
 As you can see here, registering and deregistering the new nodes to the load balancer is handled manually for simplicity purposes here. However, you might consider handling this through service discovery mechanism (lik with [consul](https://www.consul.io/)). Keep in mind that the deployment scenario that you have will effect the way bring down and up the nodes on your load balancer.
@@ -54,3 +80,4 @@ We also have only one load balancer instance here which is a single point of fai
  - [How to use Docker Compose to run complex multi container apps on your Raspberry Pi‏](http://blog.hypriot.com/post/docker-compose-nodejs-haproxy/)
  - [How can I remove balanced node from haproxy via command line?](http://serverfault.com/questions/249316/how-can-i-remove-balanced-node-from-haproxy-via-command-line)
  - [Zero Downtime Deployments haproxy docker‏](https://docs.quay.io/solution/zero-downtime-deployments.html)
+ - [Automatically adding backend servers to HAProxy using docker-gen](https://dockify.io/haproxy-scale-automatically/)
