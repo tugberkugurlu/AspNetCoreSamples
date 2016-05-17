@@ -55,3 +55,13 @@ api-lb:
       - api3
       - api4
       - api5
+      
+client0:
+    build: .
+    dockerfile: docker-api-client.dockerfile
+    container_name: client0
+    environment:
+      - ASPNET_ENV=Development
+      - ApiClient_ApiBaseUrl=http://api-lb
+    links:
+      - api-lb

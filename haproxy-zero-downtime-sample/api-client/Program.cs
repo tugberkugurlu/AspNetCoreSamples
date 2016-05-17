@@ -20,6 +20,9 @@ namespace ApiClient
                 return -1;
             }
             
+            Console.WriteLine("Started the api-client, giving time for APIs to init");
+            Task.Delay(5000).Wait();
+            
             using(var client = new HttpClient { BaseAddress = new Uri(settings.ApiBaseUrl) })
             {
                 while (true)
@@ -34,8 +37,6 @@ namespace ApiClient
                         {
                             Console.WriteLine(car.Make + ", " + car.Model);
                         }
-                        
-                        Console.WriteLine(Environment.NewLine);
                     }
                     catch (Exception ex)
                     {

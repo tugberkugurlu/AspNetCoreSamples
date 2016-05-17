@@ -12,11 +12,11 @@ This sample will cover a deployment scenario where you are deploying a minor or 
  - **api0**: First node of the HTTP API service, exposes port `4000`.
  - **api1**: Second node of the HTTP API service, exposes port `4000`.
  - **api2**: Third node of the HTTP API service, exposes port `4000`.
- - **clien0**: An instance of the client simulator.
- - **clien1**: An instance of the client simulator.
- - **clien2**: An instance of the client simulator.
- - **clien3**: An instance of the client simulator.
- - **clien4**: An instance of the client simulator.
+ - **client0**: An instance of the client simulator.
+ - **client1**: An instance of the client simulator.
+ - **client2**: An instance of the client simulator.
+ - **client3**: An instance of the client simulator.
+ - **client4**: An instance of the client simulator.
  
 ## Running the Sample
 
