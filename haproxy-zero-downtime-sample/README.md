@@ -64,6 +64,19 @@ A few useful links on this:
  - [HAProxy doesn't start, can not bind UNIX socket "/run/haproxy/admin.sock"](http://stackoverflow.com/questions/30101075/haproxy-doesnt-start-can-not-bind-unix-socket-run-haproxy-admin-sock)
  - [HAProxy disabled server mode](https://cbonte.github.io/haproxy-dconv/configuration-1.5.html#5.2-disabled)
 
+#### Deployment Script
+
+In order to simulate a deployment, we will put new servers (which has API 1.1 in them) in rotation and take the old onces out. During these transition, there should not be any connection loss and no request should fail to serve. This is script to handle this deployment simulation:
+
+```bash
+echo "enable server api_nodes/api3" | sudo socat stdio ./haproxy-data/haproxysock && \
+echo "enable server api_nodes/api4" | sudo socat stdio ./haproxy-data/haproxysock && \
+echo "enable server api_nodes/api5" | sudo socat stdio ./haproxy-data/haproxysock && \
+echo "disable server api_nodes/api0" | sudo socat stdio ./haproxy-data/haproxysock && \
+echo "disable server api_nodes/api1" | sudo socat stdio ./haproxy-data/haproxysock && \
+echo "disable server api_nodes/api2" | sudo socat stdio ./haproxy-data/haproxysock
+```
+
 ## Going Further
 
 As you can see here, registering and deregistering the new nodes to the load balancer is handled manually for simplicity purposes here. However, you might consider handling this through service discovery mechanism (lik with [consul](https://www.consul.io/)). Keep in mind that the deployment scenario that you have will effect the way bring down and up the nodes on your load balancer.
