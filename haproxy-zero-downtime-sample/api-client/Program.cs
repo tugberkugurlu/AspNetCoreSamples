@@ -45,8 +45,6 @@ namespace ApiClient
                     Task.Delay(100).Wait();
                 }
             }
-            
-            return 0;
         }
     }
     
