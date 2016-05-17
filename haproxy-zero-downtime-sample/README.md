@@ -33,26 +33,7 @@ You can run this example
 
 > TODO: Put image of the terminal where you have the outputs of the clients.
 
-### Doing the Deployment
-
-Before doing the deployment, run the below command (while being at the path of this README file) to see the current status of the cluster:
-
-```bash
-echo "show servers state api_nodes" | sudo socat stdio ./haproxy-data/haproxysock
-```
-
-You should see a smilar view to following:
-
-```
-3 api_nodes 1 api0 172.17.0.4 2 0 1 1 406 15 3 4 6 0 0 0
-3 api_nodes 2 api1 172.17.0.5 2 0 1 1 407 15 3 4 6 0 0 0
-3 api_nodes 3 api2 172.17.0.6 2 0 1 1 405 15 3 4 6 0 0 0
-3 api_nodes 4 api3 172.17.0.7 0 5 1 1 420 1 0 0 14 0 0 0
-3 api_nodes 5 api4 172.17.0.2 0 5 1 1 420 1 0 0 14 0 0 0
-3 api_nodes 6 api5 172.17.0.3 0 5 1 1 420 1 0 0 14 0 0 0
-```
-
-6th column here shows the state of the server and `2` indicates enabled and where `0` means disabled. This is our current server state and we will do a seemless switch to make last 3 servers active and first 3 disabled. 
+### Doing the Deployment 
 
 #### Communicating with HAProxy
 
@@ -80,6 +61,27 @@ A few useful links on this:
  - [Simple explanation of the Unix sockets](http://programmers.stackexchange.com/a/135972/22417)
  - [HAProxy doesn't start, can not bind UNIX socket "/run/haproxy/admin.sock"](http://stackoverflow.com/questions/30101075/haproxy-doesnt-start-can-not-bind-unix-socket-run-haproxy-admin-sock)
  - [HAProxy disabled server mode](https://cbonte.github.io/haproxy-dconv/configuration-1.5.html#5.2-disabled)
+
+#### Before the Deployment
+
+Before doing the deployment, run the below command (while being at the path of this README file) to see the current status of the cluster:
+
+```bash
+echo "show servers state api_nodes" | sudo socat stdio ./haproxy-data/haproxysock
+```
+
+You should see a smilar view to following:
+
+```
+3 api_nodes 1 api0 172.17.0.4 2 0 1 1 406 15 3 4 6 0 0 0
+3 api_nodes 2 api1 172.17.0.5 2 0 1 1 407 15 3 4 6 0 0 0
+3 api_nodes 3 api2 172.17.0.6 2 0 1 1 405 15 3 4 6 0 0 0
+3 api_nodes 4 api3 172.17.0.7 0 5 1 1 420 1 0 0 14 0 0 0
+3 api_nodes 5 api4 172.17.0.2 0 5 1 1 420 1 0 0 14 0 0 0
+3 api_nodes 6 api5 172.17.0.3 0 5 1 1 420 1 0 0 14 0 0 0
+```
+
+6th column here shows the operational state of the server (`srv_op_state`, [see](http://www.haproxy.org/download/1.6/doc/management.txt)). `2` indicates [`RUNNING`](https://github.com/haproxy/haproxy/blob/v1.6.0/include/types/server.h#L50) and where `0` means [`STOPPED`](https://github.com/haproxy/haproxy/blob/v1.6.0/include/types/server.h#L48). So, this table of information shows our current server state and we will do a seemless switch to make last 3 servers active and first 3 disabled ([see](https://github.com/haproxy/haproxy/blob/v1.6.0/include/types/server.h#L47-L52) for all options).
 
 #### Deployment Script
 
@@ -123,7 +125,7 @@ We also have only one load balancer instance here which is a single point of fai
 
 ## Resources
 
- - [HAProxy 1.7 Docs](http://www.haproxy.org/download/1.7/doc/management.txt)
+ - [HAProxy 1.6 Docs](http://www.haproxy.org/download/1.6/doc/management.txt)
  - [Load Balancing with HAProxy](https://serversforhackers.com/load-balancing-with-haproxy)
  - [Using HAProxy and Consul for dynamic service discovery on Docker‏](http://sirile.github.io/2015/05/18/using-haproxy-and-consul-for-dynamic-service-discovery-on-docker.html)
  - [How to use Docker Compose to run complex multi container apps on your Raspberry Pi‏](http://blog.hypriot.com/post/docker-compose-nodejs-haproxy/)
