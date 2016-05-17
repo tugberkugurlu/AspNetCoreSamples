@@ -132,6 +132,7 @@ We also have only one load balancer instance here which is a single point of fai
  - [How can I remove balanced node from haproxy via command line?](http://serverfault.com/questions/249316/how-can-i-remove-balanced-node-from-haproxy-via-command-line)
  - [Zero Downtime Deployments haproxy docker‏](https://docs.quay.io/solution/zero-downtime-deployments.html)
  - [Automatically adding backend servers to HAProxy using docker-gen](https://dockify.io/haproxy-scale-automatically/)
- - [Zero-Downtime Restarts with HAProxy](https://www.igvita.com/2008/12/02/zero-downtime-restarts-with-haproxy/)
  - [Question: using haproxy.socket to add new servers](http://haproxy.formilux.narkive.com/1OibZABp/using-haproxy-socket-to-add-new-servers)
+ - [Actual Zero-Downtime with HAProxy](https://medium.com/@Drew_Stokes/actual-zero-downtime-with-haproxy-18318578fde6#.k1bx8sruu)
+ - [Zero-Downtime Restarts with HAProxy](https://www.igvita.com/2008/12/02/zero-downtime-restarts-with-haproxy/)
  - [Yelp Blog: True Zero Downtime HAProxy Reloads](http://engineeringblog.yelp.com/2015/04/true-zero-downtime-haproxy-reloads.html)
