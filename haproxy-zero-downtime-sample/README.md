@@ -35,7 +35,24 @@ You can run this example
 
 ### Doing the Deployment
 
-> TODO: Write the thing.
+Before doing the deployment, run the below command (while being at the path of this README file) to see the current status of the cluster:
+
+```bash
+echo "show servers state api_nodes" | sudo socat stdio ./haproxy-data/haproxysock
+```
+
+You should see a smilar view to following:
+
+```
+3 api_nodes 1 api0 172.17.0.4 2 0 1 1 406 15 3 4 6 0 0 0
+3 api_nodes 2 api1 172.17.0.5 2 0 1 1 407 15 3 4 6 0 0 0
+3 api_nodes 3 api2 172.17.0.6 2 0 1 1 405 15 3 4 6 0 0 0
+3 api_nodes 4 api3 172.17.0.7 0 5 1 1 420 1 0 0 14 0 0 0
+3 api_nodes 5 api4 172.17.0.2 0 5 1 1 420 1 0 0 14 0 0 0
+3 api_nodes 6 api5 172.17.0.3 0 5 1 1 420 1 0 0 14 0 0 0
+```
+
+6th column here shows the state of the server and `2` indicates enabled and where `0` means disabled. This is our current server state and we will do a seemless switch to make last 3 servers active and first 3 disabled. 
 
 #### Communicating with HAProxy
 
@@ -75,6 +92,23 @@ echo "enable server api_nodes/api5" | sudo socat stdio ./haproxy-data/haproxysoc
 echo "disable server api_nodes/api0" | sudo socat stdio ./haproxy-data/haproxysock && \
 echo "disable server api_nodes/api1" | sudo socat stdio ./haproxy-data/haproxysock && \
 echo "disable server api_nodes/api2" | sudo socat stdio ./haproxy-data/haproxysock
+```
+
+Now, running the below command to see the server states:
+
+```bash
+echo "show servers state api_nodes" | sudo socat stdio ./haproxy-data/haproxysock
+```
+
+We see that `api3`, `api4` and `api5` is now eanbled.
+
+```
+3 api_nodes 1 api0 172.17.0.4 0 1 1 1 5 15 3 0 14 0 0 0
+3 api_nodes 2 api1 172.17.0.5 0 1 1 1 5 15 3 0 14 0 0 0
+3 api_nodes 3 api2 172.17.0.6 0 1 1 1 5 15 3 0 14 0 0 0
+3 api_nodes 4 api3 172.17.0.7 2 4 1 1 5 15 3 4 6 0 0 0
+3 api_nodes 5 api4 172.17.0.2 2 4 1 1 5 15 3 4 6 0 0 0
+3 api_nodes 6 api5 172.17.0.3 2 4 1 1 5 15 3 4 6 0 0 0
 ```
 
 ## Going Further
