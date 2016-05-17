@@ -65,3 +65,43 @@ client0:
       - ApiClient_ApiBaseUrl=http://api-lb
     links:
       - api-lb
+      
+client1:
+    build: .
+    dockerfile: docker-api-client.dockerfile
+    container_name: client1
+    environment:
+      - ASPNET_ENV=Development
+      - ApiClient_ApiBaseUrl=http://api-lb
+    links:
+      - api-lb
+      
+client2:
+    build: .
+    dockerfile: docker-api-client.dockerfile
+    container_name: client2
+    environment:
+      - ASPNET_ENV=Development
+      - ApiClient_ApiBaseUrl=http://api-lb
+    links:
+      - api-lb
+      
+client3:
+    build: .
+    dockerfile: docker-api-client.dockerfile
+    container_name: client3
+    environment:
+      - ASPNET_ENV=Development
+      - ApiClient_ApiBaseUrl=http://api-lb
+    links:
+      - api-lb
+      
+client4:
+    build: .
+    dockerfile: docker-api-client.dockerfile
+    container_name: client4
+    environment:
+      - ASPNET_ENV=Development
+      - ApiClient_ApiBaseUrl=http://api-lb
+    links:
+      - api-lb
