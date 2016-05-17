@@ -1,0 +1,27 @@
+{
+    "version": "1.0.0",
+    "compilationOptions": {
+        "emitEntryPoint": true
+    },
+    "dependencies": {
+        "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.0.0-rc1-final",
+        "Microsoft.Extensions.PlatformAbstractions": "1.0.0-rc1-final",
+        "Microsoft.Extensions.OptionsModel": "1.0.0-rc1-final",
+        "Newtonsoft.Json": "8.0.3"
+    },
+    "frameworks": {
+        "dnx451": {
+            "frameworkAssemblies": {
+                "System.Net.Http": ""
+            }
+        },
+        "dnxcore50": {
+            "dependencies": {
+                "System.Runtime.Extensions": "4.0.11-beta-23516",
+                "System.Net.Http": "4.0.1-beta-23516",
+                "System.Console": "4.0.0-beta-23516",
+                "System.Threading": "4.0.11-beta-23516"
+            }
+        }
+    }
+}
