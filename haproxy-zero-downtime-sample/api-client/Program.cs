@@ -37,6 +37,8 @@ namespace ApiClient
                         {
                             Console.WriteLine(car.Make + ", " + car.Model);
                         }
+                        
+                        Console.Write(Environment.NewLine);
                     }
                     catch (Exception ex)
                     {
