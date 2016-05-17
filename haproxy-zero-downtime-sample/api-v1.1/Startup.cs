@@ -17,7 +17,7 @@ namespace HelloWorldWeb
     {   
         public Startup(ILoggerFactory loggerFactory) 
         {
-            loggerFactory.MinimumLevel = LogLevel.Debug;
+            loggerFactory.MinimumLevel = LogLevel.Error;
             loggerFactory.AddConsole();
         }
         
