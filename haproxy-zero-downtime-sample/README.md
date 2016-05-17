@@ -123,6 +123,7 @@ We also have only one load balancer instance here which is a single point of fai
 
 ## Resources
 
+ - [HAProxy 1.7 Docs](http://www.haproxy.org/download/1.7/doc/management.txt)
  - [Load Balancing with HAProxy](https://serversforhackers.com/load-balancing-with-haproxy)
  - [Using HAProxy and Consul for dynamic service discovery on Docker‏](http://sirile.github.io/2015/05/18/using-haproxy-and-consul-for-dynamic-service-discovery-on-docker.html)
  - [How to use Docker Compose to run complex multi container apps on your Raspberry Pi‏](http://blog.hypriot.com/post/docker-compose-nodejs-haproxy/)
