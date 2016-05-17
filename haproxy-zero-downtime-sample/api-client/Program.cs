@@ -4,24 +4,29 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace ApiClient
 {   
-    public static class Program 
+    public class Program 
     {
         public static int Main(string[] args)
         {
             var config = ConfigBuilder.Build();
             var settings = config.Get<ApiClientSettings>();
+            var loggerFactory = new LoggerFactory();
+            var logger = loggerFactory.CreateLogger<Program>();
+            loggerFactory.MinimumLevel = LogLevel.Error;
+            loggerFactory.AddConsole();
             
             if(settings?.ApiBaseUrl == null)
             {
-                Console.Error.WriteLine("Error: Specify ApiBaseUrl through ApiClient_ApiBaseUrl environment variable.");
+                logger.LogError("Error: Specify ApiBaseUrl through ApiClient_ApiBaseUrl environment variable.");
                 return -1;
             }
             
-            Console.WriteLine("Started the api-client, giving time for APIs to init");
+            logger.LogInformation("Started the api-client, giving time for APIs to init");
             Task.Delay(5000).Wait();
             
             using(var client = new HttpClient { BaseAddress = new Uri(settings.ApiBaseUrl) })
@@ -38,16 +43,16 @@ namespace ApiClient
                         var machineName = response.Headers.GetValues("MachineName").First();
                         if(!machines.Any(x => x.Equals(machineName, StringComparison.OrdinalIgnoreCase)))
                         {
-                            Console.WriteLine($"'{DateTime.UtcNow}': first request from {machineName}");
+                            logger.LogCritical($"'{DateTime.UtcNow}': first request from {machineName}");
                             machines.Add(machineName);
-                            
-                            var cars = JsonConvert.DeserializeObject<IEnumerable<Car>>(response.Content.ReadAsStringAsync().Result);
-                            Console.WriteLine(string.Join(";", cars.Select(x => $"{x.Make}, {x.Model}")));
                         }
+                        
+                        var cars = JsonConvert.DeserializeObject<IEnumerable<Car>>(response.Content.ReadAsStringAsync().Result);
+                        logger.LogInformation(string.Join(";", cars.Select(x => $"{x.Make}, {x.Model}")));
                     }
                     catch (Exception ex)
                     {
-                        Console.Error.WriteLine($"Error: {ex.Message}");
+                        logger.LogError($"Error: {ex.Message}");
                     }
                     
                     Task.Delay(100).Wait();
