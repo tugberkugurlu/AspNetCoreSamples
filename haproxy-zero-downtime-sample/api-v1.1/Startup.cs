@@ -11,7 +11,7 @@ using Microsoft.AspNet.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace HelloWorldWeb 
+namespace HelloWorldWeb
 {
     public class Startup 
     {   
@@ -28,24 +28,30 @@ namespace HelloWorldWeb
         
         public void Configure(IApplicationBuilder app)
         {
-            app.UseMvc();
-            app.Run(async ctx => 
-            {
-                ctx.Response.StatusCode = 200;
-                ctx.Response.Headers["Content-Type"] = "text/html";
-                StringBuilder builder = new StringBuilder();
-                builder.AppendLine($"<div>Hello from {GetMachineName()}! Here is my context:</div>");
-                builder.AppendLine("<hr/>");
-                foreach(DictionaryEntry envVar in System.Environment.GetEnvironmentVariables())
-                {
-                    builder.AppendLine(envVar.Key  + ":" + envVar.Value);
-                }
-                
-                await ctx.Response.WriteAsync($"<pre>{builder.ToString()}</pre>");
-            });
+            app.UseMiddleware<RequestIdMiddleware>()
+               .UseMiddleware<MachineNameMiddleware>()
+               .UseMvc()
+               .Run(async ctx => 
+               {
+                   ctx.Response.StatusCode = 200;
+                   ctx.Response.Headers["Content-Type"] = "text/html";
+                   StringBuilder builder = new StringBuilder();
+                   builder.AppendLine($"<div>Hello from {Helper.GetMachineName()}! Here is my context:</div>");
+                   builder.AppendLine("<hr/>");
+                   foreach(DictionaryEntry envVar in System.Environment.GetEnvironmentVariables())
+                   {
+                       builder.AppendLine(envVar.Key  + ":" + envVar.Value);
+                   }
+                   await ctx.Response.WriteAsync($"<pre>{builder.ToString()}</pre>");
+               });
         }
         
-        private static string GetMachineName() 
+        public static void Main(string[] args) => WebApplication.Run<Startup>(args);
+    }
+    
+    public static class Helper 
+    {
+        public static string GetMachineName() 
         {
 #if DNX451
             var machineName = Environment.MachineName;
@@ -59,8 +65,38 @@ namespace HelloWorldWeb
             
             return machineName;
         }
-        
-        public static void Main(string[] args) => WebApplication.Run<Startup>(args);
+    }
+    
+    public class RequestIdMiddleware
+    {
+        private readonly RequestDelegate _next;
+
+        public RequestIdMiddleware(RequestDelegate next)
+        {
+            _next = next;
+        }
+
+        public async Task Invoke(HttpContext context)
+        {
+            context.Response.Headers["RequestId"] = context.TraceIdentifier;
+            await _next(context);
+        }        
+    }
+    
+    public class MachineNameMiddleware
+    {
+        private readonly RequestDelegate _next;
+
+        public MachineNameMiddleware(RequestDelegate next)
+        {
+            _next = next;
+        }
+
+        public async Task Invoke(HttpContext context)
+        {
+            context.Response.Headers["MachineName"] = Helper.GetMachineName();
+            await _next(context);
+        }
     }
     
     public class Car

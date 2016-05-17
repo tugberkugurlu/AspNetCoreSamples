@@ -8,7 +8,7 @@ This sample will cover a deployment scenario where you are deploying a minor or 
 
 ## Structure
 
- - **lb0**: Will act as the load balancer, exposes port `5000` and directs traffic to **api** instances.
+ - **lb0**: Will act as the load balancer, exposes port `80` and directs traffic to **api** instances.
  - **api0**: First node of the HTTP API service, exposes port `4000`.
  - **api1**: Second node of the HTTP API service, exposes port `4000`.
  - **api2**: Third node of the HTTP API service, exposes port `4000`.

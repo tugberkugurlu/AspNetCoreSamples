@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
@@ -25,20 +26,24 @@ namespace ApiClient
             
             using(var client = new HttpClient { BaseAddress = new Uri(settings.ApiBaseUrl) })
             {
+                IList<string> machines = new List<string>();
+                
                 while (true)
                 {
                     try
-                    {
-                        Console.WriteLine($"Fething at {DateTime.UtcNow}");
-                        
+                    {   
                         var response = client.GetAsync("cars").Result;
-                        var cars = JsonConvert.DeserializeObject<IEnumerable<Car>>(response.Content.ReadAsStringAsync().Result);
-                        foreach (var car in cars)
-                        {
-                            Console.WriteLine(car.Make + ", " + car.Model);
-                        }
+                        response.EnsureSuccessStatusCode();
                         
-                        Console.Write(Environment.NewLine);
+                        var machineName = response.Headers.GetValues("MachineName").First();
+                        if(!machines.Any(x => x.Equals(machineName, StringComparison.OrdinalIgnoreCase)))
+                        {
+                            Console.WriteLine($"'{DateTime.UtcNow}': first request from {machineName}");
+                            machines.Add(machineName);
+                            
+                            var cars = JsonConvert.DeserializeObject<IEnumerable<Car>>(response.Content.ReadAsStringAsync().Result);
+                            Console.WriteLine(string.Join(";", cars.Select(x => $"{x.Make}, {x.Model}")));
+                        }
                     }
                     catch (Exception ex)
                     {
