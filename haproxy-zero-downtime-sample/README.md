@@ -22,8 +22,6 @@ This sample will cover a deployment scenario where you are deploying a minor or 
  
 ## Running the Sample
 
-You can run this example 
-
 ### Requirements
 
  - Docker
