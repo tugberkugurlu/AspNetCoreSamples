@@ -104,6 +104,7 @@ namespace HelloWorldWeb
         public int Id { get; set; }
         public string Make { get; set; }
         public string Model { get; set; }
+        public string Colour { get; set; }
     }
     
     [Route("cars")]
@@ -111,12 +112,12 @@ namespace HelloWorldWeb
     {
         private static IEnumerable<Car> _cars = new[]
         {
-            new Car { Id = 1, Make = "Renault", Model = "Clio" },
-            new Car { Id = 2, Make = "Mercedes", Model = "GLA" },
-            new Car { Id = 4, Make = "Renault", Model = "Captur" },
-            new Car { Id = 5, Make = "Volkswagen", Model = "Polo" },
-            new Car { Id = 3, Make = "Mercedes", Model = "CLS Coupe" },
-            new Car { Id = 6, Make = "Toyota", Model = "Yaris" }
+            new Car { Id = 1, Make = "Renault", Model = "Clio", Colour = "Red" },
+            new Car { Id = 2, Make = "Mercedes", Model = "GLA", Colour = "Black" },
+            new Car { Id = 4, Make = "Renault", Model = "Captur", Colour = "White" },
+            new Car { Id = 5, Make = "Volkswagen", Model = "Polo", Colour = "Black" },
+            new Car { Id = 3, Make = "Mercedes", Model = "CLS Coupe", Colour = "Yellow" },
+            new Car { Id = 6, Make = "Toyota", Model = "Yaris", Colour = "Orange" }
         };
            
         [Route("")]
