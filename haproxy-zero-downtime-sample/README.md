@@ -2,6 +2,8 @@
 
 This is a sample to demonstrate a deployment scenario where you have no downtime during the deployments.
 
+![](./media/demo-0.gif)
+
 ## Concepts Covered
 
 This sample will cover a deployment scenario where you are deploying a minor or a patch change, which means that the existing clients are going to be compatible with the new changes.
@@ -29,9 +31,7 @@ You can run this example
 
 ### Running
 
-`cd` into the directory where this README file is located and from there, running should be as simple as invoking `docker-compose up` command. Now you have the entire sample up and you should see that the clients are woking as expected:
-
-> TODO: Put image of the terminal where you have the outputs of the clients.
+`cd` into the directory where this README file is located and from there, running should be as simple as invoking `docker-compose up` command. Now you have the entire sample up and you should see that the clients are woking as expected by logging the first occurance of a response from a different server.
 
 ### Doing the Deployment 
 
