@@ -2,7 +2,7 @@
 
 This is a sample to demonstrate a deployment scenario where you have no downtime during the deployments.
 
-![](./media/demo-0.gif)
+![](./.media/demo-0.gif)
 
 ## Concepts Covered
 
