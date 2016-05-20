@@ -115,7 +115,7 @@ We see that `api3`, `api4` and `api5` is now eanbled.
 
 As you can see here, registering and deregistering the new nodes to the load balancer is handled manually for simplicity purposes here. However, you might consider handling this through service discovery mechanism (lik with [consul](https://www.consul.io/)). Keep in mind that the deployment scenario that you have will effect the way bring down and up the nodes on your load balancer.
 
-This sample doesn't cover the sticky session concept, which plays a vital role on web application deployments where you don't want to break the client while it's in the middle of a processing.
+This sample doesn't cover [the sticky session concept](http://blog.haproxy.com/2012/03/29/load-balancing-affinity-persistence-sticky-sessions-what-you-need-to-know/), which plays a vital role on web application deployments where you don't want to break the client while it's in the middle of a processing.
 
 This sample doesn't cover deployments which involves a data storage technology.
 
