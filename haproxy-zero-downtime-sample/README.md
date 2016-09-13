@@ -24,6 +24,7 @@ This sample will cover a deployment scenario where you are deploying a minor or 
 
 ### Requirements
 
+ - A Linux machine (e.g. Ubuntu 14.04, etc.) (it doesn't work on Mac :disappointed: See #1)
  - Docker
  - Docker Compose
 
@@ -40,12 +41,6 @@ HAProxy can communicate through a Unix socket. [You can add a Unix socket in you
 ```
 sudo apt-get install socat
 ```
-
-> On MacBook, [you can install socat through brew](http://macappstore.org/socat/):
->
-> ```bash
-> brew install socat
-> ```
 
 To take down a node, use [`disable server`](http://cbonte.github.io/haproxy-dconv/configuration-1.5.html#9.2-disable%20server) Unix socket command. This example takes down `api1` server under `api_nodes` backend while assuming the socket is on `./haproxy-data/haproxysock`:
 
