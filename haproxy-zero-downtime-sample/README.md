@@ -24,7 +24,7 @@ This sample will cover a deployment scenario where you are deploying a minor or 
 
 ### Requirements
 
- - A Linux machine (e.g. Ubuntu 14.04, etc.) (it doesn't work on Mac :disappointed: See #1)
+ - A Linux machine (e.g. Ubuntu 14.04, etc.) (it doesn't work on Mac :disappointed: See [#1](https://github.com/tugberkugurlu/AspNetCoreSamples/issues/1))
  - Docker
  - Docker Compose
 
