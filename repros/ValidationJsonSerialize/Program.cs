@@ -18,13 +18,8 @@ namespace ConsoleApplication
     public class ValuesController : Controller 
     {
         [HttpGet("values")]
-        public IActionResult Get(int skip, int take)
+        public IActionResult Get([FromQuery]PaginatedRequestCommand requestCommand)
         {
-            var requestCommand = new PaginatedRequestCommand
-            {
-                Skip = skip, Take = take
-            };
-
             return TryValidateModel(requestCommand) ?
                 Ok(new [] { "value1", "value2" }) :
                 BadRequest(ModelState) as IActionResult;
