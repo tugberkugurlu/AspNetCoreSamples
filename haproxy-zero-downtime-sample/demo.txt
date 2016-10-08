@@ -1,0 +1,27 @@
+## Run
+
+docker-compose up
+
+## Manual Things
+
+ - Explain what application does
+ - Show what happens when it fails to connect
+
+Run the below script to disable without enabling:
+
+echo "disable server api_nodes/api0" | sudo socat stdio ./haproxy-data/haproxysock && \
+echo "disable server api_nodes/api1" | sudo socat stdio ./haproxy-data/haproxysock && \
+echo "disable server api_nodes/api2" | sudo socat stdio ./haproxy-data/haproxysock
+
+## See the nodes
+
+echo "show servers state api_nodes" | sudo socat stdio ./haproxy-data/haproxysock
+
+## Deployment Script
+
+echo "enable server api_nodes/api3" | sudo socat stdio ./haproxy-data/haproxysock && \
+echo "enable server api_nodes/api4" | sudo socat stdio ./haproxy-data/haproxysock && \
+echo "enable server api_nodes/api5" | sudo socat stdio ./haproxy-data/haproxysock && \
+echo "disable server api_nodes/api0" | sudo socat stdio ./haproxy-data/haproxysock && \
+echo "disable server api_nodes/api1" | sudo socat stdio ./haproxy-data/haproxysock && \
+echo "disable server api_nodes/api2" | sudo socat stdio ./haproxy-data/haproxysock
