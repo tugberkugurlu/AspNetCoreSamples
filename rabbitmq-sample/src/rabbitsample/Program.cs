@@ -1,17 +1,25 @@
 using System;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using EasyNetQ;
 using LoremNET;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.PlatformAbstractions;
+using Newtonsoft.Json;
+using RabbitMQ.Client;
 
 namespace rabbitsample
 {
     public static class Program 
     {
+        public const string ExchangeName = "activity.textmessages";
+        public const string QueueName = "textmessages.worker.1";
+        public const string QueueName2 = "textmessages.worker.2";
+        public const string RoutingKey = "textmessage.received";
+
         // EasyNetQ Quick Start: https://github.com/EasyNetQ/EasyNetQ/wiki/Quick-Start
         // Management Console: http://localhost:15672/
+        // Naming Convention: https://derickbailey.com/2015/09/02/rabbitmq-best-practices-for-designing-exchanges-queues-and-bindings/
 
         // Exchange: where the message are being published
         // Queue: where the exchgaes are being directed to
@@ -31,15 +39,33 @@ namespace rabbitsample
         
         public static void Main(string[] args)
         {
+            Console.WriteLine("Waiting for 5s to let the RabbitMQ start up");
+            Thread.Sleep(5000);
+
             var config = ConfigBuilder.Build();
             var settings = new RabbitMQSettings();
             ConfigurationBinder.Bind(config.GetSection("RabbitMQ"), settings);
 
             Console.WriteLine($"Starting the pub/sub sample on '{settings.Host}' rabbitmq instance.");
             
-            var pubTask = new Publisher(settings.Host).Start();
-            var subTask = new Subscriber(settings.Host).Start();
-            Task.WhenAll(pubTask, subTask).Wait();
+            var factory = new ConnectionFactory 
+            {
+                HostName = settings.Host
+            };
+
+            var conn = factory.CreateConnection();
+            var channel = conn.CreateModel();
+
+            channel.ExchangeDeclare(ExchangeName, ExchangeType.Fanout, false, false);
+            channel.QueueDeclare(QueueName, false, false, false, null);
+            channel.QueueDeclare(QueueName2, false, false, false, null);
+            channel.QueueBind(QueueName, ExchangeName, RoutingKey, null);
+            channel.QueueBind(QueueName2, ExchangeName, RoutingKey, null);
+
+            var pubTask = new Publisher(conn).Start();
+            var subTask = new Subscriber(conn, QueueName).Start();
+            var subTask2 = new Subscriber(conn, QueueName2).Start();
+            Task.WhenAll(pubTask, subTask, subTask2).Wait();
         }
     }
     
@@ -67,30 +93,27 @@ namespace rabbitsample
 
     public class Publisher
     {
-        private readonly string _host;
+        private readonly IModel _channel;
         
-        public Publisher(string host)
+        public Publisher(IConnection conn)
         {
-            if (host == null) throw new ArgumentNullException(nameof(host));
-            _host = host;
+            if (conn == null) throw new ArgumentNullException(nameof(conn));
+            _channel = conn.CreateModel();
         }
         
         public Task Start()
         {
             return Task.Run(() =>
             {
-                using (var bus = RabbitHutch.CreateBus($"host={_host}"))
-                {   
-                    while (true)
-                    {
-                        var input = Lorem.Sentence(50);
-                        bus.Publish(new TextMessage
-                        {
-                            Text = input
-                        });
-
-                        Thread.Sleep(1000);
-                    }
+                while (true)
+                {
+                    var input = Lorem.Sentence(50);
+                    var textMessage = new TextMessage  { Text = input };
+                    var message = JsonConvert.SerializeObject(textMessage);
+                    var messageBodyBytes = Encoding.UTF8.GetBytes(message);
+                    
+                    _channel.BasicPublish(Program.ExchangeName, Program.RoutingKey, null, messageBodyBytes);
+                    Thread.Sleep(5000);
                 }
             });
         }
@@ -98,30 +121,55 @@ namespace rabbitsample
 
     public class Subscriber
     {
-        private readonly string _host;
-        
-        public Subscriber(string host)
+        private readonly IModel _channel;
+        private readonly string _queueName;
+
+        public Subscriber(IConnection conn, string queueName)
         {
-            if (host == null) throw new ArgumentNullException(nameof(host));
-            _host = host;
+            if (conn == null) throw new ArgumentNullException(nameof(conn));
+            if (queueName == null) throw new ArgumentNullException(nameof(queueName));
+
+            _channel = conn.CreateModel();
+            _queueName = queueName;
         }
         
         public Task Start()
         {
             return Task.Run(() =>
             {
-                using (var bus = RabbitHutch.CreateBus($"host={_host}"))
+                while(true) 
                 {
-                    bus.Subscribe<TextMessage>("test", HandleTextMessage);
-                    Thread.Sleep(-1);
+                    var result = _channel.BasicGet(_queueName, false);
+
+                    if(result != null) 
+                    {
+                        try
+                        {
+                            var bodyBytes = result.Body;
+                            var jsonBody = Encoding.UTF8.GetString(bodyBytes);
+                            var message = JsonConvert.DeserializeObject<TextMessage>(jsonBody);
+                            HandleTextMessage(message, _queueName);
+
+                            _channel.BasicAck(result.DeliveryTag, false);
+                        }
+                        catch (Exception ex) 
+                        {
+                            Console.WriteLine("Exception while handling message: {0}", ex.ToString());
+                        }
+                    } 
+                    else 
+                    {
+                        Console.WriteLine("No message to process, wait for 2s");
+                        Thread.Sleep(2000);
+                    }
                 }
             });
         }
 
-        private static void HandleTextMessage(TextMessage textMessage)
+        private static void HandleTextMessage(TextMessage textMessage, string queueName)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("[Subscriber] Got message: {0}", textMessage.Text);
+            Console.WriteLine("[Subscriber-{0}] Got message: {1}", queueName, textMessage.Text);
             Console.ResetColor();
         }
     }
