@@ -1,19 +1,10 @@
-FROM microsoft/aspnet:1.0.0-rc1-update1
+FROM microsoft/dotnet:1.0.0-preview2-sdk
 
 COPY ./src/rabbitsample/project.json /app/rabbitsample/
-
-# set nuget sources
 COPY ./NuGet.Config /app/
-
-# restore dependencies
 WORKDIR /app/
-RUN ["dnu", "restore", "--parallel"]
-
-# add all dependency files
+RUN dotnet restore
 ADD ./src/ /app/
 
-# add the application files
-ADD ./src/rabbitsample /app/rabbitsample/
-
 WORKDIR /app/rabbitsample/
-ENTRYPOINT ["dnx", "run"]
+ENTRYPOINT ["dotnet", "run"]

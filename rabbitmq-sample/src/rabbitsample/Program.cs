@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using EasyNetQ;
+using LoremNET;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.PlatformAbstractions;
 
@@ -31,8 +32,9 @@ namespace rabbitsample
         public static void Main(string[] args)
         {
             var config = ConfigBuilder.Build();
-            var settings = config.Get<RabbitMQSettings>("RabbitMQ");
-            
+            var settings = new RabbitMQSettings();
+            ConfigurationBinder.Bind(config.GetSection("RabbitMQ"), settings);
+
             Console.WriteLine($"Starting the pub/sub sample on '{settings.Host}' rabbitmq instance.");
             
             var pubTask = new Publisher(settings.Host).Start();
@@ -81,7 +83,7 @@ namespace rabbitsample
                 {   
                     while (true)
                     {
-                        var input = Faker.Lorem.Sentence();
+                        var input = Lorem.Sentence(50);
                         bus.Publish(new TextMessage
                         {
                             Text = input

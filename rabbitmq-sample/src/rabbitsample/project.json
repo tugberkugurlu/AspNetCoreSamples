@@ -1,18 +1,28 @@
 {
-    "version": "0.0.0",
-    "compilationOptions": {
-        "emitEntryPoint": true
+    "version": "1.0.0-*",
+    "buildOptions": {
+        "debugType": "portable",
+        "emitEntryPoint": true,
+        "copyToOutput": ["config.json"]
     },
     "dependencies": {
-        "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.0.0-rc1-final",
-        "Microsoft.Extensions.Configuration.Json": "1.0.0-rc1-final",
-        "Microsoft.Extensions.PlatformAbstractions": "1.0.0-rc1-final",
-        "Microsoft.Extensions.OptionsModel": "1.0.0-rc1-final",
-        "EasyNetQ": "0.58.0.433",
-        "Faker.Net": "1.0.3"
+        "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.0.0",
+        "Microsoft.Extensions.Configuration.Json": "1.0.0",
+        "Microsoft.Extensions.Configuration.Binder": "1.0.0",
+        "Microsoft.Extensions.PlatformAbstractions": "1.0.0",
+        "Microsoft.Extensions.Options": "1.0.0",
+        "Lorem.DNX.NET": "1.0.40",
+        "easynetq": "2.0.2-netcore0001"
     },
     "frameworks": {
-        "dnx451": {
+        "netcoreapp1.0": {
+            "dependencies": {
+                "Microsoft.NETCore.App": {
+                    "type": "platform",
+                    "version": "1.0.0"
+                }
+            },
+            "imports": "dnxcore50"
         }
     }
 }
