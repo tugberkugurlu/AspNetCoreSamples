@@ -1,0 +1,19 @@
+mongo:
+    build: .
+    dockerfile: mongo.dockerfile
+    container_name: nginx_redis_auth_mongodb
+    ports:
+      - "27017:27017"
+
+webapp:
+    build: .
+    dockerfile: app.dockerfile
+    container_name: nginx_redis_auth_webapp
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_server.urls=http://0.0.0.0:6000
+      - WebApp_MongoDb__ConnectionString=mongodb://mongo:27017
+    links:
+      - mongo
+    ports:      
+      - "5000:6000"

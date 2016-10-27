@@ -1,0 +1,8 @@
+bin
+obj
+/src/bin/
+/src/obj/
+/src/obj/**/*
+/src/bin/**/*
+project.lock.json
+**/*/project.lock.json
