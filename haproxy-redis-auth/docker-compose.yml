@@ -1,19 +1,38 @@
 mongo:
     build: .
     dockerfile: mongo.dockerfile
-    container_name: nginx_redis_auth_mongodb
+    container_name: haproxy_redis_auth_mongodb
     ports:
       - "27017:27017"
 
-webapp:
+webapp1:
     build: .
     dockerfile: app.dockerfile
-    container_name: nginx_redis_auth_webapp
+    container_name: haproxy_redis_auth_webapp1
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_server.urls=http://0.0.0.0:6000
       - WebApp_MongoDb__ConnectionString=mongodb://mongo:27017
     links:
       - mongo
-    ports:      
-      - "5000:6000"
+
+webapp2:
+    build: .
+    dockerfile: app.dockerfile
+    container_name: haproxy_redis_auth_webapp2
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_server.urls=http://0.0.0.0:6000
+      - WebApp_MongoDb__ConnectionString=mongodb://mongo:27017
+    links:
+      - mongo
+
+app_lb:
+    build: .
+    dockerfile: haproxy.dockerfile
+    container_name: app_lb
+    ports:
+      - "5000:80"
+    links:
+      - webapp1
+      - webapp2
