@@ -15,6 +15,9 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.DataProtection;
 using Dnx.Identity.MongoDB;
+using StackExchange.Redis;
+using System.Net;
+using System.Linq;
 
 namespace IdentitySample
 {
@@ -77,8 +80,15 @@ namespace IdentitySample
             // Hosting doesn't add IHttpContextAccessor by default
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+            // sad but a giant hack :(
+            // https://github.com/StackExchange/StackExchange.Redis/issues/410#issuecomment-220829614
+            var redisHost = Configuration.GetValue<string>("Redis:Host");
+            var redisPort = Configuration.GetValue<int>("Redis:Port");
+            var redisIpAddress = Dns.GetHostEntryAsync(redisHost).Result.AddressList.Last();
+            var redis = ConnectionMultiplexer.Connect($"{redisIpAddress}:{redisPort}");
+
+            services.AddDataProtection().PersistKeysToRedis(redis, "DataProtection-Keys");
             services.AddOptions();
-            services.AddDataProtection();
 
             services.TryAddSingleton<IdentityMarkerService>();
             services.TryAddSingleton<IUserValidator<MongoIdentityUser>, UserValidator<MongoIdentityUser>>();

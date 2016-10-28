@@ -5,6 +5,13 @@ mongo:
     ports:
       - "27017:27017"
 
+redis:
+    build: .
+    dockerfile: redis.dockerfile
+    container_name: haproxy_redis_auth_redis
+    ports:
+      - "6379:6379"
+
 webapp1:
     build: .
     dockerfile: app.dockerfile
@@ -13,8 +20,11 @@ webapp1:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_server.urls=http://0.0.0.0:6000
       - WebApp_MongoDb__ConnectionString=mongodb://mongo:27017
+      - WebApp_Redis__Host=redis
+      - WebApp_Redis__Port=6379
     links:
       - mongo
+      - redis
 
 webapp2:
     build: .
@@ -24,8 +34,11 @@ webapp2:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_server.urls=http://0.0.0.0:6000
       - WebApp_MongoDb__ConnectionString=mongodb://mongo:27017
+      - WebApp_Redis__Host=redis
+      - WebApp_Redis__Port=6379
     links:
       - mongo
+      - redis
 
 app_lb:
     build: .
