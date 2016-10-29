@@ -22,7 +22,6 @@ webapp1:
       - WebApp_MongoDb__ConnectionString=mongodb://mongo:27017
       - WebApp_Redis__Host=redis
       - WebApp_Redis__Port=6379
-      - WebApp_App__IsPrimary=true
     links:
       - mongo
       - redis
@@ -37,7 +36,6 @@ webapp2:
       - WebApp_MongoDb__ConnectionString=mongodb://mongo:27017
       - WebApp_Redis__Host=redis
       - WebApp_Redis__Port=6379
-      - WebApp_App__IsPrimary=false
     links:
       - mongo
       - redis
