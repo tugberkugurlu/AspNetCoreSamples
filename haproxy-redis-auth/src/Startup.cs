@@ -87,7 +87,19 @@ namespace IdentitySample
             var redisIpAddress = Dns.GetHostEntryAsync(redisHost).Result.AddressList.Last();
             var redis = ConnectionMultiplexer.Connect($"{redisIpAddress}:{redisPort}");
 
-            services.AddDataProtection().PersistKeysToRedis(redis, "DataProtection-Keys");
+            var dpConfig = services.AddDataProtection()
+                .PersistKeysToRedis(redis, "DataProtection-Keys");            
+
+            var isPrimary = Configuration.GetValue<bool>("App:IsPrimary");
+            if(!isPrimary)
+            {
+                Console.WriteLine("Disabling authomatic key generation for data protection as this node is the not the primary");
+
+                // disable authomatic key generation when the application is not the primary 
+                // to prevent the race condition cases
+                dpConfig.DisableAutomaticKeyGeneration();
+            }
+
             services.AddOptions();
 
             services.TryAddSingleton<IdentityMarkerService>();
