@@ -51,6 +51,16 @@ namespace IdentitySample
         /// </summary>
         public void ConfigureServices(IServiceCollection services)
         {
+            // sad but a giant hack :(
+            // https://github.com/StackExchange/StackExchange.Redis/issues/410#issuecomment-220829614
+            var redisHost = Configuration.GetValue<string>("Redis:Host");
+            var redisPort = Configuration.GetValue<int>("Redis:Port");
+            var redisIpAddress = Dns.GetHostEntryAsync(redisHost).Result.AddressList.Last();
+            var redis = ConnectionMultiplexer.Connect($"{redisIpAddress}:{redisPort}");
+
+            services.AddDataProtection().PersistKeysToRedis(redis, "DataProtection-Keys");
+            services.AddOptions();
+
             services.Configure<MongoDbSettings>(Configuration.GetSection("MongoDb"));
             services.AddSingleton<IUserStore<MongoIdentityUser>>(provider =>
             {
@@ -64,9 +74,7 @@ namespace IdentitySample
 
             services.Configure<IdentityOptions>(options =>
             {
-                var dataProtectionPath = Path.Combine(_env.WebRootPath, "identity-artifacts");
                 options.Cookies.ApplicationCookie.AuthenticationScheme = "ApplicationCookie";
-                options.Cookies.ApplicationCookie.DataProtectionProvider = DataProtectionProvider.Create(dataProtectionPath);
                 options.Lockout.AllowedForNewUsers = true;
             });
 
@@ -79,16 +87,6 @@ namespace IdentitySample
 
             // Hosting doesn't add IHttpContextAccessor by default
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
-            // sad but a giant hack :(
-            // https://github.com/StackExchange/StackExchange.Redis/issues/410#issuecomment-220829614
-            var redisHost = Configuration.GetValue<string>("Redis:Host");
-            var redisPort = Configuration.GetValue<int>("Redis:Port");
-            var redisIpAddress = Dns.GetHostEntryAsync(redisHost).Result.AddressList.Last();
-            var redis = ConnectionMultiplexer.Connect($"{redisIpAddress}:{redisPort}");
-
-            services.AddDataProtection().PersistKeysToRedis(redis, "DataProtection-Keys");
-            services.AddOptions();
 
             services.TryAddSingleton<IdentityMarkerService>();
             services.TryAddSingleton<IUserValidator<MongoIdentityUser>, UserValidator<MongoIdentityUser>>();
