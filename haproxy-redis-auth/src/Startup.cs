@@ -14,7 +14,7 @@ using MongoDB.Driver;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.DataProtection;
-using Dnx.Identity.MongoDB;
+using AspNetCore.Identity.MongoDB;
 using StackExchange.Redis;
 using System.Net;
 using System.Linq;
@@ -98,7 +98,7 @@ namespace IdentitySample
             services.TryAddSingleton<IdentityErrorDescriber>();
             services.TryAddSingleton<ISecurityStampValidator, SecurityStampValidator<MongoIdentityUser>>();
             services.TryAddSingleton<IUserClaimsPrincipalFactory<MongoIdentityUser>, UserClaimsPrincipalFactory<MongoIdentityUser>>();
-            services.TryAddSingleton<UserManager<MongoIdentityUser>, UserManager<MongoIdentityUser>>();
+            services.TryAddScoped<UserManager<MongoIdentityUser>, UserManager<MongoIdentityUser>>();
             services.TryAddScoped<SignInManager<MongoIdentityUser>, SignInManager<MongoIdentityUser>>();
 
             AddDefaultTokenProviders(services);

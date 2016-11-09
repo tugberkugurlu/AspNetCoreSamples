@@ -26,8 +26,7 @@
         "Microsoft.Extensions.Logging.Debug": "1.1.0-preview1-final",
         "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0-preview1-final",
         "Microsoft.AspNetCore.DataProtection.Redis": "0.1.0-preview1-final",
-        "AspNetCore.Identity.MongoDB": "1.0.0-rc2",
-        "MongoDB.Driver": "2.3.0"
+        "AspNetCore.Identity.MongoDB": "1.0.0-rc2-2"
     },
     "buildOptions": {
         "emitEntryPoint": true,
