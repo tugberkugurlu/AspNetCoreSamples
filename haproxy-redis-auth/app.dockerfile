@@ -1,4 +1,4 @@
-FROM microsoft/dotnet:1.0.0-preview2.1-sdk
+FROM microsoft/dotnet:1.1.0-sdk-projectjson
 
 COPY ./src/project.json /app/webapp/
 COPY ./NuGet.Config /app/
