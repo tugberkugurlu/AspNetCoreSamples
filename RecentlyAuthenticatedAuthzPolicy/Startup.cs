@@ -11,11 +11,17 @@ using Microsoft.Extensions.DependencyInjection;
 using RecentlyAuthenticatedAuthzPolicy.Data;
 using RecentlyAuthenticatedAuthzPolicy.Models;
 using RecentlyAuthenticatedAuthzPolicy.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using System.Security.Claims;
 
 namespace RecentlyAuthenticatedAuthzPolicy
 {
     public class Startup
     {
+        public const string AutheticationTimeUtcClaimType = "AuthenticationTimeInUtc";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -29,7 +35,7 @@ namespace RecentlyAuthenticatedAuthzPolicy
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentityWithCustomConfig<ApplicationUser, IdentityRole>(setupAction: null)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -62,6 +68,77 @@ namespace RecentlyAuthenticatedAuthzPolicy
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+        }
+    }
+
+    public static class CustomIdentityDIExtensions 
+    {
+        // mainly taken from
+        // https://github.com/aspnet/Identity/blob/85f8a49aef68bf9763cd9854ce1dd4a26a7c5d3c/src/Identity/IdentityServiceCollectionExtensions.cs
+        public static IdentityBuilder AddIdentityWithCustomConfig<TUser, TRole>(
+            this IServiceCollection services,
+            Action<IdentityOptions> setupAction)
+            where TUser : class
+            where TRole : class
+        {
+            // Services used by identity
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
+                options.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
+                options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
+            })
+			.AddCookie(IdentityConstants.ApplicationScheme, o =>
+            {
+                o.LoginPath = new PathString("/Account/Login");
+                o.Events = new CookieAuthenticationEvents
+                {
+                    OnSigningIn = ctx => 
+                    {
+                        ctx.Principal.Identities.First().AddClaim(new Claim(Startup.AutheticationTimeUtcClaimType, DateTime.UtcNow.ToString()));
+                        return Task.CompletedTask;    
+                    },
+
+                    OnValidatePrincipal = SecurityStampValidator.ValidatePrincipalAsync
+                };
+            })
+			.AddCookie(IdentityConstants.ExternalScheme, o =>
+            {
+                o.Cookie.Name = IdentityConstants.ExternalScheme;
+                o.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+            })
+			.AddCookie(IdentityConstants.TwoFactorRememberMeScheme,
+                o => o.Cookie.Name = IdentityConstants.TwoFactorRememberMeScheme)
+            .AddCookie(IdentityConstants.TwoFactorUserIdScheme, o =>
+            {
+                o.Cookie.Name = IdentityConstants.TwoFactorUserIdScheme;
+                o.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+            });
+
+            // Hosting doesn't add IHttpContextAccessor by default
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            
+            // Identity services
+            services.TryAddScoped<IUserValidator<TUser>, UserValidator<TUser>>();
+            services.TryAddScoped<IPasswordValidator<TUser>, PasswordValidator<TUser>>();
+            services.TryAddScoped<IPasswordHasher<TUser>, PasswordHasher<TUser>>();
+            services.TryAddScoped<ILookupNormalizer, UpperInvariantLookupNormalizer>();
+            services.TryAddScoped<IRoleValidator<TRole>, RoleValidator<TRole>>();
+
+            // No interface for the error describer so we can add errors without rev'ing the interface
+            services.TryAddScoped<IdentityErrorDescriber>();
+            services.TryAddScoped<ISecurityStampValidator, SecurityStampValidator<TUser>>();
+            services.TryAddScoped<IUserClaimsPrincipalFactory<TUser>, UserClaimsPrincipalFactory<TUser, TRole>>();
+            services.TryAddScoped<UserManager<TUser>, AspNetUserManager<TUser>>();
+            services.TryAddScoped<SignInManager<TUser>, SignInManager<TUser>>();
+            services.TryAddScoped<RoleManager<TRole>, AspNetRoleManager<TRole>>();
+
+            if (setupAction != null)
+            {
+                services.Configure(setupAction);
+            }
+
+            return new IdentityBuilder(typeof(TUser), typeof(TRole), services);
         }
     }
 }
