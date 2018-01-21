@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -21,6 +20,7 @@ namespace RecentlyAuthenticatedAuthzPolicy
     public class Startup
     {
         public const string AutheticationTimeUtcClaimType = "AuthenticationTimeInUtc";
+        public const string RecentlyAuthenticatedPolicyName = "RecentlyAuthenticated";
 
         public Startup(IConfiguration configuration)
         {
@@ -38,6 +38,20 @@ namespace RecentlyAuthenticatedAuthzPolicy
             services.AddIdentityWithCustomConfig<ApplicationUser, IdentityRole>(setupAction: null)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+            services.AddAuthorization(options => 
+            {
+                options.AddPolicy(RecentlyAuthenticatedPolicyName, policy => 
+                    policy.RequireAuthenticatedUser()
+                        .RequireClaim(AutheticationTimeUtcClaimType)
+                        .RequireAssertion(ctx => 
+                        {
+                            var authenticationTimeStr = ctx.User.FindFirstValue(AutheticationTimeUtcClaimType);
+                            var authenticationTime = DateTime.Parse(authenticationTimeStr);
+
+                            return authenticationTime > DateTime.UtcNow.AddMinutes(-2);
+                        }));
+            });
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RecentlyAuthenticatedAuthzPolicy.Models;
 
@@ -22,6 +23,7 @@ namespace RecentlyAuthenticatedAuthzPolicy.Controllers
             return View();
         }
 
+        [Authorize(Policy = Startup.RecentlyAuthenticatedPolicyName)]
         public IActionResult Contact()
         {
             ViewData["Message"] = "Your contact page.";
