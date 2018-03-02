@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SignalRCoreChat</title>
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="/site.css" />
+</head>
+<body>
+    <div class="container body-content">
+        <ul id="messages"></ul>
+
+        <input type="text" id="message" />
+        <button id="send">Send</button>
+    </div>
+    <script src="/node_modules/@aspnet/signalr/dist/browser/signalr.js"></script>
+    <script>
+        (function() {
+            const connection = new signalR.HubConnection('/hubs/chat');
+
+            connection.on('Message_Received', (message) => {
+                const listItem = document.createElement('li');
+                console.log(message);
+                listItem.innerHTML = message.timestamp + ': ' + message.message;
+                document.getElementById('messages').appendChild(listItem);
+            });
+
+            document.getElementById('send').addEventListener('click', event => {
+                const msg = document.getElementById('message').value;
+                fetch('/messages', {
+                    body: JSON.stringify({ message: msg }),
+                    method: 'POST',
+                    headers: {
+                        'content-type': 'application/json'
+                    }
+                }).then(response => {
+                    console.log(response.status);
+                    console.log(response.statusText);
+                });
+
+                event.preventDefault();
+            });
+
+            connection.start().then(() => console.log('conn started!'));
+
+            console.log(connection);
+        }());
+    </script>
+</body>
+</html>
