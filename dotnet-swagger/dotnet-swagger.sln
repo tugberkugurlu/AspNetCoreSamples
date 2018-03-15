@@ -1,0 +1,48 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26124.0
+MinimumVisualStudioVersion = 15.0.26124.0
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnet-swagger", "TurquoiseSoftware.DotNetTools.Swagger\dotnet-swagger.csproj", "{0625BC59-2554-4224-AF6E-0ED660BB9EFF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TurquoiseSoftware.DotNetTools.Swagger.TestApp", "TurquoiseSoftware.DotNetTools.Swagger.TestApp\TurquoiseSoftware.DotNetTools.Swagger.TestApp.csproj", "{7A5BA8A3-9EF0-4143-96FC-5A148B28BE1A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0625BC59-2554-4224-AF6E-0ED660BB9EFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0625BC59-2554-4224-AF6E-0ED660BB9EFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0625BC59-2554-4224-AF6E-0ED660BB9EFF}.Debug|x64.ActiveCfg = Debug|x64
+		{0625BC59-2554-4224-AF6E-0ED660BB9EFF}.Debug|x64.Build.0 = Debug|x64
+		{0625BC59-2554-4224-AF6E-0ED660BB9EFF}.Debug|x86.ActiveCfg = Debug|x86
+		{0625BC59-2554-4224-AF6E-0ED660BB9EFF}.Debug|x86.Build.0 = Debug|x86
+		{0625BC59-2554-4224-AF6E-0ED660BB9EFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0625BC59-2554-4224-AF6E-0ED660BB9EFF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0625BC59-2554-4224-AF6E-0ED660BB9EFF}.Release|x64.ActiveCfg = Release|x64
+		{0625BC59-2554-4224-AF6E-0ED660BB9EFF}.Release|x64.Build.0 = Release|x64
+		{0625BC59-2554-4224-AF6E-0ED660BB9EFF}.Release|x86.ActiveCfg = Release|x86
+		{0625BC59-2554-4224-AF6E-0ED660BB9EFF}.Release|x86.Build.0 = Release|x86
+		{7A5BA8A3-9EF0-4143-96FC-5A148B28BE1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A5BA8A3-9EF0-4143-96FC-5A148B28BE1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A5BA8A3-9EF0-4143-96FC-5A148B28BE1A}.Debug|x64.ActiveCfg = Debug|x64
+		{7A5BA8A3-9EF0-4143-96FC-5A148B28BE1A}.Debug|x64.Build.0 = Debug|x64
+		{7A5BA8A3-9EF0-4143-96FC-5A148B28BE1A}.Debug|x86.ActiveCfg = Debug|x86
+		{7A5BA8A3-9EF0-4143-96FC-5A148B28BE1A}.Debug|x86.Build.0 = Debug|x86
+		{7A5BA8A3-9EF0-4143-96FC-5A148B28BE1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A5BA8A3-9EF0-4143-96FC-5A148B28BE1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A5BA8A3-9EF0-4143-96FC-5A148B28BE1A}.Release|x64.ActiveCfg = Release|x64
+		{7A5BA8A3-9EF0-4143-96FC-5A148B28BE1A}.Release|x64.Build.0 = Release|x64
+		{7A5BA8A3-9EF0-4143-96FC-5A148B28BE1A}.Release|x86.ActiveCfg = Release|x86
+		{7A5BA8A3-9EF0-4143-96FC-5A148B28BE1A}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+EndGlobal
