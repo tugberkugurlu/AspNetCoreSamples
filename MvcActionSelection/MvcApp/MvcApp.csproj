@@ -12,4 +12,9 @@
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\InternalApis\InternalApis.csproj" />
+    <ProjectReference Include="..\PublicApis\PublicApis.csproj" />
+  </ItemGroup>
+
 </Project>
