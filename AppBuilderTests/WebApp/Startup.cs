@@ -90,6 +90,7 @@ namespace WebApp
     {
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMvc();
             services.AddSingleton<IMessageProvider, DefaultMessageProvider>();
             services.AddSingleton<IHeaderMessageProvider, PublicHeaderMessageProvider>();
         }
@@ -106,6 +107,8 @@ namespace WebApp
             {
                 await context.Response.WriteAsync("Hello World!");
             });
+
+            app.UseMvc();
         }
     }
 }
