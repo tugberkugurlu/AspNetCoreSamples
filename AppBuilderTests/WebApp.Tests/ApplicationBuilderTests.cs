@@ -35,6 +35,7 @@ namespace WebApp.Tests
 
             var appBuilderFactory = webHost.Services.GetService<IApplicationBuilderFactory>();
             _appBuilder = appBuilderFactory.CreateBuilder(webHost.ServerFeatures);
+            
             // This reflection magic is to be able to get the common services for free so that we don't rebuild them from scratch
             // we need this as we cannot go back from IServiceProvider to IServiceCollection
             // see: https://github.com/aspnet/Hosting/blob/rel/2.0.0/src/Microsoft.AspNetCore.Hosting/WebHostBuilder.cs#L169
